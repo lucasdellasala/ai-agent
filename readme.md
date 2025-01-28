@@ -107,6 +107,22 @@ El proyecto expone un endpoint principal para procesar los mensajes del usuario.
 }
 ```
 
+**Endpoint:** `GET /logs`
+
+**Ejemplo de response:**
+
+```json
+[
+    {
+        "type": "OFF_TOPIC",
+        "userId": "U-001",
+        "userMessage": "Hola, quiero una rueda y ¿sabes cocinar?",
+        "reason": "Tema no relacionado",
+        "timestamp": "2025-01-28T06:13:46.371Z"
+    }
+]
+```
+
 ---
 
 ## Edge Cases
