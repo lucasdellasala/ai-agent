@@ -68,6 +68,10 @@ export class DeepSeekProvider implements ILanguageModelProvider {
       temperature: 0.3,
     });
 
+    if (response.usage) {
+      Context.updateUsage(response.usage);
+    }
+
     try {
       const rawData = response.choices[0].message.content;
       const parsedData = JSON.parse(rawData || "{}");

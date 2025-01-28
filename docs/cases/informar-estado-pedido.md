@@ -1,7 +1,3 @@
-# Edge Cases por Funcionalidad
-
----
-
 ## **Informar Estado de Pedido**
 
 ### 1. ID Inválido
@@ -28,9 +24,9 @@
   > {
   >   "context": {
   >     "usage": {
-  >       "prompt_tokens": 79,
-  >       "completion_tokens": 39,
-  >       "total_tokens": 118
+  >       "prompt_tokens": 653,
+  >       "completion_tokens": 124,
+  >       "total_tokens": 777
   >     }
   >   },
   >   "message": "Hola, John. No encontré ningún pedido con el número ABC1. Podrías confirmarme el número correcto? Así te puedo ayudar mejor. Gracias!"
@@ -59,9 +55,9 @@
   > {
   >   "context": {
   >     "usage": {
-  >       "prompt_tokens": 85,
-  >       "completion_tokens": 35,
-  >       "total_tokens": 120
+  >       "prompt_tokens": 659,
+  >       "completion_tokens": 90,
+  >       "total_tokens": 749
   >     }
   >   },
   >   "message": "Hola, John! Tu pedido #1 está en tránsito. Te aviso cuando haya novedades. Necesitás algo más?"
@@ -94,14 +90,16 @@
   > {
   >   "context": {
   >     "usage": {
-  >       "prompt_tokens": 79,
-  >       "completion_tokens": 47,
-  >       "total_tokens": 126
+  >       "prompt_tokens": 653,
+  >       "completion_tokens": 108,
+  >       "total_tokens": 761
   >     }
   >   },
   >   "message": "Hola, John. No tengo registros de un pedido número 5. Podrías confirmarme el número o si hiciste algún pedido recientemente? Así te puedo ayudar mejor. Gracias."
   > }
   > ```
+
+- **Caso**: El ID corresponde a un pedido cancelado/eliminado: no implementado.
 
 ---
 
@@ -129,75 +127,29 @@
   > {
   >   "context": {
   >     "usage": {
-  >       "prompt_tokens": 83,
-  >       "completion_tokens": 57,
-  >       "total_tokens": 140
+  >       "prompt_tokens": 654,
+  >       "completion_tokens": 89,
+  >       "total_tokens": 743
   >     }
   >   },
   >   "message": "Hola, John! Para poder ayudarte con el estado de tu pedido, necesitaría que me pases el número de pedido. Lo tenés a mano? Así puedo buscarlo y darte la info que necesitás. Gracias!"
   > }
   > ```
 
----
-
-## **Derivar Consulta**
-
-### 1. Intenciones No Cubiertas
-
-- **Caso**: Solicitudes de modificar pedidos.  
-  **Mensaje**: "Hola, quiero cambiar la dirección de entrega de mi pedido."
-
-  > **Log**:
-  > ```json
-  > {
-  >   "type": "DERIVATION",
-  >   "userId": "U-001",
-  >   "userMessage": "Hola, quiero cambiar la dirección de entrega de mi pedido.",
-  >   "reason": "Consulta compleja",
-  >   "timestamp": "2025-01-28T00:06:20.546Z"
-  > }
-  > ```
-
----
-
-## **Off-Topic**
-
-### 1. Mensajes Ambiguos
-
-- **Caso**: Saludos sin contexto.  
-  **Mensaje**: "Hola."
-
-  > **Log**:
-  > ```json
-  > {
-  >   "type": "OFF_TOPIC",
-  >   "userId": "U-001",
-  >   "userMessage": "Hola!",
-  >   "reason": "Tema no relacionado",
-  >   "timestamp": "2025-01-28T00:22:19.028Z"
-  > }
-  > ```
-
----
-
-## **Ofrecer Productos**
-
-### 1. Productos No Existentes
-
-- **Caso**: El usuario solicita un producto fuera del catálogo.  
-  **Mensaje**: "Quiero una bici, tienen?"
+- **Caso**: El usuario envía múltiples IDs en un solo mensaje.
+  **Mensaje**: "Hola, quiero saber el estado de mi pedido 1 y 2."
 
   > **OpenAI**
   > ```json
   > {
   >   "context": {
   >     "usage": {
-  >       "prompt_tokens": 499,
-  >       "completion_tokens": 84,
-  >       "total_tokens": 583
+  >       "prompt_tokens": 512,
+  >       "completion_tokens": 89,
+  >       "total_tokens": 601
   >     }
   >   },
-  >   "message": "Hola! Por ahora no tengo bicis, pero tenemos ruedas y frenos disponibles. Te interesa algún otro producto?"
+  >   "message": "Hola! El pedido #1 está en tránsito y el pedido #2 ya fue entregado. Te puedo ayudar con algo más?"
   > }
   > ```
 
@@ -206,29 +158,28 @@
   > {
   >   "context": {
   >     "usage": {
-  >       "prompt_tokens": 92,
-  >       "completion_tokens": 34,
-  >       "total_tokens": 126
+  >       "prompt_tokens": 672,
+  >       "completion_tokens": 139,
+  >       "total_tokens": 811
   >     }
   >   },
-  >   "message": "No, no tenemos bicis. Tenemos rueda y freno en stock. Te sirve?"
+  >   "message": "Hola, John. Ahí te tiro el estado de tus pedidos:\n\n- Pedido #1: Está en tránsito.\n- Pedido #2: Ya fue entregado.\n\nSi necesitás más info, avisá. 👌"
   > }
   > ```
 
 ---
 
-## **Pricing**
+### 4. Problemas de Base de Datos:
 
-Los precios están calculados en base a los modelos [gpt-4o](https://openai.com/api/pricing/) y [deepseek-chat](https://api-docs.deepseek.com/quick_start/pricing). No se contempla precio cache ni batch. DeepSeek está en promo hasta el 2025-02-08.
+- **Caso**: La base de datos está caída o no responde: no implementado.
+- **Caso**: Timeouts al consultar el estado: no implementado.
 
-### Precio por Token
+---
 
-- **OpenAI**:
-    - 2.5USD / 1M input.
-    - 10USD / 1M output.
-- **DeepSeek**:
-    - 0.14USD / 1M input.
-    - 0.28USD / 1M output.
+### 5. Permisos/Seguridad:
 
-### Nota
-Una vez terminado este documento me di cuenta que es demasiada la diferencia de tokens entre OpenAI y DeepSeek. Más allá del precio por token, la cantidad de tokens debería ser similar. Voy a hacer un commit y en un commit siguiente haré las correcciones pertinentes en el servicio pero por cuestiones de tiempo no voy a editar este documento.
+- **Caso**: El ID pertenece a otro usuario (no debe revelar información): no se implementó lógica de usuarios o pedidos asociados a usuarios.
+
+---
+
+## [⏭Continuar viendo edge cases](./derivar-consulta.md)

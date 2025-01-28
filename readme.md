@@ -109,6 +109,12 @@ El proyecto expone un endpoint principal para procesar los mensajes del usuario.
 
 ---
 
+## Edge Cases
+
+[🪒 edge-cases.md](./docs/edge-cases.md) 
+
+---
+
 ## De Yapa
 
 ![de yapa](https://i.ibb.co/dbFq6Sn/deyapa.png)
@@ -180,7 +186,7 @@ Ya está integrado!🎉
 
 ## Usage
 
-Está bueno probar la implementación y ver los números, así que en la respuesta de cada request se puede ver el uso en tokens dentro del contexto. Para ver la comparación entre modelos te invito a ir al archivo [edge-cases.md](./edge-cases.md) para ver en cada request cómo se comporta cada modelo.
+Está bueno probar la implementación y ver los números, así que en la respuesta de cada request se puede ver el uso en tokens dentro del contexto. Para ver la comparación entre modelos te invito a ir al archivo [🪒 edge-cases.md](./docs/edge-cases.md) para ver en cada request cómo se comporta cada modelo.
 
 ---
 
