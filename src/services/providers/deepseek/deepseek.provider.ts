@@ -86,7 +86,7 @@ export class DeepSeekProvider implements ILanguageModelProvider {
     initialMessage: string,
     userName?: string
   ): Promise<any> {
-    const systemContent = `Operador humano (WhatsApp) con estilo argentino. Usa voseo, lenguaje conciso y sin revelar que eres un bot.`;
+    const systemContent = `Operador humano (WhatsApp) con estilo argentino. Usa voseo, lenguaje conciso y sin revelar que sos un asistente virtual.`;
 
     const context = Context.getFullContext();
     const orders = (
@@ -110,7 +110,6 @@ export class DeepSeekProvider implements ILanguageModelProvider {
       { role: "user", content: initialMessage },
     ];
 
-    console.debug("🚀 Calling DeepSeek - createFriendlyResponse");
     const response = await this.callDeepSeek({
       model: "deepseek-chat",
       messages,
@@ -133,10 +132,6 @@ export class DeepSeekProvider implements ILanguageModelProvider {
   ): Promise<any> {
     try {
       const response = await deepseek.chat.completions.create(params);
-      console.debug(
-        "💲 USAGE DeepSeek",
-        JSON.stringify(response.usage, null, 2)
-      );
       return response;
     } catch (error) {
       console.error(`❌ Error calling DeepSeek: ${error}`);

@@ -96,9 +96,7 @@ export class OpenAIProvider implements ILanguageModelProvider {
     params: ChatCompletionCreateParamsNonStreaming
   ): Promise<any> {
     try {
-      console.log('🧨 params for openai.chat.completions.create', JSON.stringify(params, null, 2));
       const response = await openai.chat.completions.create(params);
-      console.debug("💲 USAGE OpenAI", JSON.stringify(response.usage, null, 2));
       return response;
     } catch (error) {
       console.error(`❌ Error calling OpenAI: ${error}`);

@@ -2,7 +2,7 @@
 
 ---
 
-#### **Descripción del Proyecto**
+## **Descripción del Proyecto**
 
 Este proyecto implementa un **agente virtual** diseñado para interactuar con usuarios a través de texto. Está optimizado para brindar respuestas claras y eficientes en base a consultas predefinidas, como:
 
@@ -15,30 +15,13 @@ El objetivo principal es demostrar un flujo funcional y escalable, que pueda int
 
 ---
 
-#### **Características**
-
-- **Compatibilidad con Múltiples Proveedores**: Implementación modular para usar tanto OpenAI como Deepseek, según las necesidades del negocio.
-- **Optimización de Tokens**: Minimiza el costo por solicitud utilizando prompts y respuestas estructuradas de manera eficiente.
-- **Extensibilidad**: El diseño está pensado para que sea sencillo agregar nuevos proveedores o funciones en el futuro.
-- **TODO: Gestión de Contexto**: Mantiene un historial limitado de la conversación para mejorar la interacción con el usuario.
-
----
-
-#### **Requerimientos**
-
-- **Node.js** v16 o superior.
-- **NPM** o **Yarn**.
-- Cuenta activa en **OpenAI** y/o **Deepseek** para configurar las claves API.
-
----
-
-#### **Configuración**
+## **Configuración**
 
 1. **Clonar el repositorio**:
 
    ```bash
-   git clone https://github.com/tu_usuario/agente-virtual.git
-   cd agente-virtual
+   git clone https://github.com/lucasdellasala/volanti.ai-demo2.git
+   cd volanti.ai-demo2
    ```
 
 2. **Instalar dependencias**:
@@ -52,7 +35,6 @@ El objetivo principal es demostrar un flujo funcional y escalable, que pueda int
 
    ```env
    OPENAI_API_KEY=tu_clave_openai
-   DEEPSEEK_API_KEY=tu_clave_deepseek
    PORT=3000
    ```
 
@@ -63,7 +45,7 @@ El objetivo principal es demostrar un flujo funcional y escalable, que pueda int
 
 ---
 
-#### **Uso**
+## **Uso**
 
 El proyecto expone un endpoint principal para procesar los mensajes del usuario.
 
@@ -74,8 +56,7 @@ El proyecto expone un endpoint principal para procesar los mensajes del usuario.
 ```json
 {
   "message": "Hola, quiero saber el estado de mi pedido 1",
-  "userId": "U-001",
-  "provider": "openai"
+  "userId": "U-001"
 }
 ```
 
@@ -84,41 +65,120 @@ El proyecto expone un endpoint principal para procesar los mensajes del usuario.
 ```json
 {
   "context": {
-    "userId": "U-001",
-    "userName": "John Doe",
-    "orderStatus": {
-      "orderId": "1",
-      "status": "En tránsito"
-    }
-  },
-  "userId": "U-001",
-  "message": {
-    "role": "assistant",
-    "content": "Hola! El pedido 1 está en tránsito. Necesitás algo más?",
-    "refusal": null
-  },
-  "intent": {
-    "type": "ORDER_STATUS",
-    "details": {
-      "orderId": "1",
-      "products": [],
-      "reason": ""
+    "requestId": "mql0t81zw",
+    "startTime": 1738019181786,
+    "provider": "openai",
+    "user": {
+      "id": "U-001",
+      "name": "John Doe"
     },
-    "function_call": {
-      "name": "functions.handle_order_status",
-      "parameters": {
+    "usage": {
+      "prompt_tokens": 498,
+      "completion_tokens": 77,
+      "total_tokens": 575
+    },
+    "orders": [
+      {
         "orderId": "1",
-        "products": [],
-        "reason": ""
+        "status": "En tránsito"
       }
-    }
+    ]
+  },
+  "message": "Hola, qué tal? El pedido #1 está en tránsito. Necesitás algo más?",
+  "provider_response": {
+    "types": ["ORDER_STATUS"],
+    "details": {
+      "orderIds": ["1"],
+      "products": [],
+      "reasons": []
+    },
+    "function_calls": [
+      {
+        "name": "functions.handle_order_status",
+        "parameters": {
+          "orderIds": ["1"],
+          "products": [],
+          "reason": ""
+        }
+      }
+    ]
   }
 }
 ```
 
 ---
 
-#### **Arquitectura**
+## De Yapa
+
+![de yapa](https://i.ibb.co/dbFq6Sn/deyapa.png)
+
+Y por qué no integrar el servicio con otro proveedor como DeepSeek? Ya está integrado!
+
+1. **Agregá la variable de entorno**:
+   ```env
+   DEEPSEEK_API_KEY=tu_clave_deepseek
+   ```
+2. Probá el request:
+   **Ejemplo de request\***
+
+```json
+{
+  "message": "Hola, quiero saber el estado de mi pedido 1",
+  "userId": "U-001",
+  "provider": "deepseek"
+}
+```
+
+**_Ejemplo de response_**
+
+```json
+{
+  "context": {
+    "requestId": "tqyxk1s20",
+    "startTime": 1738019740051,
+    "provider": "deepseek",
+    "user": {
+      "id": "U-001",
+      "name": "John Doe"
+    },
+    "orders": [
+      {
+        "orderId": "1",
+        "status": "En tránsito"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 34,
+      "total_tokens": 119
+    }
+  },
+  "message": "Hola, John. Tu pedido #1 está en tránsito. Te aviso si hay novedades. Necesitás algo más?",
+  "provider_response": {
+    "types": ["ORDER_STATUS"],
+    "details": {
+      "orderIds": ["1"]
+    },
+    "function_calls": [
+      {
+        "name": "handle_order_status",
+        "parameters": {
+          "orderIds": ["1"]
+        }
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Usage
+Está bueno probar la implementación y ver los números así que en la response de cada request se puede ver el usage en tokens dentro del contexto. Para ver la comparación entre modelos te invito a ir al archivo [edge-cases.md](./edge-cases.md) para ver en cada request como se comporta cada modelo. 
+
+---
+
+## **Arquitectura**
 
 El proyecto está organizado en una estructura modular para facilitar la escalabilidad:
 
@@ -138,3 +198,34 @@ src/
 │   └── mockDB.ts                # Base de datos simulada para pruebas.
 └── index.ts                     # Entrada principal del servidor.
 ```
+
+## **Base de datos**
+La base de datos está en memoria (son constantes en el archivo [mockDB.ts](./src/data/mockDB.ts)), las tablas son las siguientes (para probar los requests).
+
+---
+
+### Tabla 1: Órdenes (`ordersDB`)
+| **ID** | **Estado**               |
+|--------|--------------------------|
+| 1      | En tránsito              |
+| 2      | Entregado                |
+| 3      | Pendiente de despacho    |
+
+---
+
+### Tabla 2: Productos (`productsDB`)
+| **ID**  | **Nombre** | **Stock** |
+|---------|------------|-----------|
+| P-100   | Rueda      | 10        |
+| P-200   | Freno      | 5         |
+
+---
+
+### Tabla 3: Usuarios (`usersDB`)
+| **ID**  | **Nombre**   |
+|---------|--------------|
+| U-001   | John Doe     |
+| U-002   | Jane Doe     |
+
+---
+Autor: @lucasdellasala

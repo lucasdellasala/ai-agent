@@ -23,9 +23,6 @@ export const processUserMessage = async (
     Context.update("user", { id: userId, name: userName ?? "anonymous" });
 
     const providerResponse = await provider.getMessageIntent(userMessage);
-    console.log("👽", { providerResponse });
-
-    const shouldRespond = true;
 
     for (const intentType of providerResponse.types) {
       switch (intentType) {
@@ -59,45 +56,17 @@ export const processUserMessage = async (
       }
     }
 
+    const isOrderStatusOrProductOffer = providerResponse.types.includes("ORDER_STATUS") || providerResponse.types.includes("PRODUCT_OFFER");
+
+    const shouldRespond = isOrderStatusOrProductOffer;
+    console.log({isOrderStatusOrProductOffer}, {shouldRespond});
+
     if (!shouldRespond) {
       return res.json({
         context: Context.getFullContext(),
         provider_response: providerResponse,
       });
     }
-    /*     switch (providerResponse.types) {
-      case "ORDER_STATUS": {
-        const orders = handleOrderStatusRequest(
-          providerResponse.details?.orderIds ?? ""
-        );
-        Context.update("orders", orders);
-        break;
-      }
-
-      case "PRODUCT_OFFER": {
-        const productOffer = handleOfferProducts(
-          providerResponse.details?.products
-        );
-        Context.update("productOffer", productOffer);
-        break;
-      }
-
-      case "DERIVATION": {
-        handleDerivation(userMessage, userId, providerResponse.details?.reason);
-        return res.json({
-          context: Context.getFullContext(),
-          provider_response: providerResponse,
-        });
-      }
-
-      default: {
-        handleOffTopic(userMessage, userId, providerResponse.details?.reason);
-        return res.json({
-          context: Context.getFullContext(),
-          provider_response: providerResponse,
-        });
-      }
-    } */
 
     const { content: finalResponse } = await provider.createFriendlyResponse(
       userMessage,
