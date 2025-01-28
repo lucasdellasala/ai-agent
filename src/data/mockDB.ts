@@ -7,6 +7,7 @@ export const ordersDB = [
 export const productsDB = [
   { id: "P-100", name: "Rueda", stock: 10 },
   { id: "P-200", name: "Freno", stock: 5 },
+  { id: "P-300", name: "Volante", stock: 0 },
 ];
 
 export const usersDB = [

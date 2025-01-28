@@ -86,17 +86,23 @@ export class DeepSeekProvider implements ILanguageModelProvider {
     initialMessage: string,
     userName?: string
   ): Promise<any> {
-    const systemContent = `Operador humano (WhatsApp) con estilo argentino. Usa voseo, lenguaje conciso y sin revelar que sos un asistente virtual.`;
+    const systemContent = `
+      Operador humano (WhatsApp) con estilo argentino.
+      Usa voseo, lenguaje conciso y sin revelar que sos un asistente virtual.
+    `;
 
     const context = Context.getFullContext();
     const orders = (
       context.orders?.map((o) => `#${o.orderId}: ${o.status}`) || []
     ).join(", ");
+    const products = (
+      context.productOffer?.products.map(
+        (p) => `${p.productName}, ${p.available ? "en stock" : "sin stock"}`
+      ) || []
+    ).join(", ");
     const relevantContext = `
       Estado del pedido: ${orders ?? "N/A"}.
-      Productos solicitados: ${
-        (context.productOffer?.products || []).join(", ") || "Ninguno"
-      }.
+      Productos solicitados: ${products || "Ninguno"}.
     `;
 
     const messages: Array<ChatCompletionMessageParam> = [

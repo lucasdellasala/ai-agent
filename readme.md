@@ -39,6 +39,7 @@ El objetivo principal es demostrar un flujo funcional y escalable, que pueda int
    ```
 
 4. **Levantar el servidor**:
+
    ```bash
    npm run start
    ```
@@ -112,69 +113,74 @@ El proyecto expone un endpoint principal para procesar los mensajes del usuario.
 
 ![de yapa](https://i.ibb.co/dbFq6Sn/deyapa.png)
 
-Y por qué no integrar el servicio con otro proveedor como DeepSeek? Ya está integrado!
+Y por qué no integrar el servicio con otro proveedor como DeepSeek?🤔 
+Ya está integrado!🎉
 
 1. **Agregá la variable de entorno**:
+
    ```env
    DEEPSEEK_API_KEY=tu_clave_deepseek
    ```
+
 2. Probá el request:
+
    **Ejemplo de request\***
 
-```json
-{
-  "message": "Hola, quiero saber el estado de mi pedido 1",
-  "userId": "U-001",
-  "provider": "deepseek"
-}
-```
+   ```json
+   {
+     "message": "Hola, quiero saber el estado de mi pedido 1",
+     "userId": "U-001",
+     "provider": "deepseek"
+   }
+   ```
 
-**_Ejemplo de response_**
+   **_Ejemplo de response_**
 
-```json
-{
-  "context": {
-    "requestId": "tqyxk1s20",
-    "startTime": 1738019740051,
-    "provider": "deepseek",
-    "user": {
-      "id": "U-001",
-      "name": "John Doe"
-    },
-    "orders": [
-      {
-        "orderId": "1",
-        "status": "En tránsito"
-      }
-    ],
-    "usage": {
-      "prompt_tokens": 85,
-      "completion_tokens": 34,
-      "total_tokens": 119
-    }
-  },
-  "message": "Hola, John. Tu pedido #1 está en tránsito. Te aviso si hay novedades. Necesitás algo más?",
-  "provider_response": {
-    "types": ["ORDER_STATUS"],
-    "details": {
-      "orderIds": ["1"]
-    },
-    "function_calls": [
-      {
-        "name": "handle_order_status",
-        "parameters": {
-          "orderIds": ["1"]
-        }
-      }
-    ]
-  }
-}
-```
+   ```json
+   {
+     "context": {
+       "requestId": "tqyxk1s20",
+       "startTime": 1738019740051,
+       "provider": "deepseek",
+       "user": {
+         "id": "U-001",
+         "name": "John Doe"
+       },
+       "orders": [
+         {
+           "orderId": "1",
+           "status": "En tránsito"
+         }
+       ],
+       "usage": {
+         "prompt_tokens": 85,
+         "completion_tokens": 34,
+         "total_tokens": 119
+       }
+     },
+     "message": "Hola, John. Tu pedido #1 está en tránsito. Te aviso si hay novedades. Necesitás algo más?",
+     "provider_response": {
+       "types": ["ORDER_STATUS"],
+       "details": {
+         "orderIds": ["1"]
+       },
+       "function_calls": [
+         {
+           "name": "handle_order_status",
+           "parameters": {
+             "orderIds": ["1"]
+           }
+         }
+       ]
+     }
+   }
+   ```
 
 ---
 
 ## Usage
-Está bueno probar la implementación y ver los números así que en la response de cada request se puede ver el usage en tokens dentro del contexto. Para ver la comparación entre modelos te invito a ir al archivo [edge-cases.md](./edge-cases.md) para ver en cada request como se comporta cada modelo. 
+
+Está bueno probar la implementación y ver los números, así que en la respuesta de cada request se puede ver el uso en tokens dentro del contexto. Para ver la comparación entre modelos te invito a ir al archivo [edge-cases.md](./edge-cases.md) para ver en cada request cómo se comporta cada modelo.
 
 ---
 
@@ -184,48 +190,53 @@ El proyecto está organizado en una estructura modular para facilitar la escalab
 
 ```
 src/
+├── context/
+│   └── context.ts               # Gestión del contexto del mensaje.
 ├── controllers/
 │   └── agent.controller.ts      # Controlador principal para procesar mensajes.
 ├── services/
-│   ├── providers/
-│   │   ├── openai/              # Lógica específica para OpenAI.
-│   │   ├── deepseek/            # Lógica específica para Deepseek.
-│   │   └── provider.selector.ts # Selección dinámica de proveedores.
-│   ├── context.ts        # Gestión del contexto del mensaje.
-│   └── utils/
-│       └── sanitizeContent.ts   # Funciones de utilidad para limpiar respuestas.
+│   └── providers/
+│       ├── openai/              # Lógica específica para OpenAI.
+│       ├── deepseek/            # Lógica específica para Deepseek.
+│       └── provider.selector.ts # Selección dinámica de proveedores.
 ├── data/
 │   └── mockDB.ts                # Base de datos simulada para pruebas.
-└── index.ts                     # Entrada principal del servidor.
+└── main.ts                     # Entrada principal del servidor.
 ```
 
 ## **Base de datos**
-La base de datos está en memoria (son constantes en el archivo [mockDB.ts](./src/data/mockDB.ts)), las tablas son las siguientes (para probar los requests).
+
+La base de datos está en memoria (son constantes en el archivo [mockDB.ts](./src/data/mockDB.ts)). Las tablas son las siguientes (para probar los requests):
 
 ---
 
 ### Tabla 1: Órdenes (`ordersDB`)
-| **ID** | **Estado**               |
-|--------|--------------------------|
-| 1      | En tránsito              |
-| 2      | Entregado                |
-| 3      | Pendiente de despacho    |
+
+| **ID** | **Estado**            |
+| ------ | --------------------- |
+| 1      | En tránsito           |
+| 2      | Entregado             |
+| 3      | Pendiente de despacho |
 
 ---
 
 ### Tabla 2: Productos (`productsDB`)
-| **ID**  | **Nombre** | **Stock** |
-|---------|------------|-----------|
-| P-100   | Rueda      | 10        |
-| P-200   | Freno      | 5         |
+
+| **ID** | **Nombre** | **Stock** |
+| ------ | ---------- | --------- |
+| P-100  | Rueda      | 10        |
+| P-200  | Freno      | 5         |
+| P-300  | Volante    | 0         |
 
 ---
 
 ### Tabla 3: Usuarios (`usersDB`)
-| **ID**  | **Nombre**   |
-|---------|--------------|
-| U-001   | John Doe     |
-| U-002   | Jane Doe     |
+
+| **ID** | **Nombre** |
+| ------ | ---------- |
+| U-001  | John Doe   |
+| U-002  | Jane Doe   |
 
 ---
+
 Autor: @lucasdellasala
