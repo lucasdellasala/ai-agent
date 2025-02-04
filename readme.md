@@ -1,4 +1,4 @@
-# Challenge Gen AI DEV - Volanti.ai
+# ai-agent
 
 ---
 
@@ -20,8 +20,8 @@ El objetivo principal es demostrar un flujo funcional y escalable, que pueda int
 1. **Clonar el repositorio**:
 
    ```bash
-   git clone https://github.com/lucasdellasala/volanti.ai-demo2.git
-   cd volanti.ai-demo2
+   git clone https://github.com/lucasdellasala/ai-agent.git
+   cd ai-agent-demo2
    ```
 
 2. **Instalar dependencias**:
