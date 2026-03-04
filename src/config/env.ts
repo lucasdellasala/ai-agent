@@ -4,8 +4,8 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
-  // LLM provider keys
-  OPENAI_API_KEY: z.string().min(1, 'OPENAI_API_KEY is required'),
+  // LLM provider keys (at least one required)
+  OPENAI_API_KEY: z.string().optional(),
   DEEPSEEK_API_KEY: z.string().optional(),
 
   // Guardrails
@@ -42,7 +42,27 @@ function loadEnv(): Env {
     process.exit(1);
   }
 
+  if (!result.data.OPENAI_API_KEY && !result.data.DEEPSEEK_API_KEY) {
+    console.error('At least one LLM provider key is required (OPENAI_API_KEY or DEEPSEEK_API_KEY)');
+    process.exit(1);
+  }
+
   return result.data;
 }
 
 export const env = loadEnv();
+
+/** Returns which LLM providers have API keys configured */
+export function getAvailableProviders(): string[] {
+  const available: string[] = [];
+  if (env.OPENAI_API_KEY) available.push('openai');
+  if (env.DEEPSEEK_API_KEY) available.push('deepseek');
+  return available;
+}
+
+/** Returns the default provider based on which keys are available */
+export function getDefaultProvider(): string {
+  if (env.OPENAI_API_KEY) return 'openai';
+  if (env.DEEPSEEK_API_KEY) return 'deepseek';
+  return 'openai'; // unreachable due to startup validation
+}

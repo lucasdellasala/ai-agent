@@ -9,7 +9,7 @@ import { Context } from '../agent/context/context';
 import { tools } from '../agent/tools';
 import { withLLMSpan } from '../observability/tracing';
 
-const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY ?? '' });
 
 export class OpenAIProvider implements ILanguageModelProvider {
   private readonly model = 'gpt-4o';

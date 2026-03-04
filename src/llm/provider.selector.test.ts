@@ -20,6 +20,6 @@ describe('selectProvider', () => {
   });
 
   it('throws for unknown provider', () => {
-    expect(() => selectProvider('anthropic')).toThrow('not supported');
+    expect(() => selectProvider('anthropic')).toThrow('not available');
   });
 });

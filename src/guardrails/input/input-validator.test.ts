@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { validateInput } from './input-validator';
+import { getDefaultProvider } from '../../config/env';
 
 describe('validateInput', () => {
   it('accepts valid input', () => {
@@ -8,7 +9,7 @@ describe('validateInput', () => {
     if (result.success) {
       expect(result.data.message).toBe('Hello');
       expect(result.data.userId).toBe('U-001');
-      expect(result.data.provider).toBe('openai');
+      expect(result.data.provider).toBe(getDefaultProvider());
     }
   });
 

@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import { env } from '../../config/env';
+import { env, getDefaultProvider, getAvailableProviders } from '../../config/env';
+
+const availableProviders = getAvailableProviders() as [string, ...string[]];
+const defaultProvider = getDefaultProvider();
 
 export const AgentRequestSchema = z.object({
   message: z
@@ -7,7 +10,7 @@ export const AgentRequestSchema = z.object({
     .min(1, 'Message cannot be empty')
     .max(env.MAX_INPUT_LENGTH, `Message exceeds maximum length of ${env.MAX_INPUT_LENGTH} characters`),
   userId: z.string().optional().default('anonymous'),
-  provider: z.enum(['openai', 'deepseek']).optional().default('openai'),
+  provider: z.enum(availableProviders).optional().default(defaultProvider),
 });
 
 export type AgentRequest = z.infer<typeof AgentRequestSchema>;
