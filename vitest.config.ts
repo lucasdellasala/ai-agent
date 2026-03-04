@@ -1,0 +1,14 @@
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+    env: {
+      NODE_ENV: 'test',
+      OPENAI_API_KEY: 'test-key',
+      PORT: '3000',
+    },
+  },
+});
