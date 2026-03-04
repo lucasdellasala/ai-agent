@@ -7,39 +7,39 @@
 - [x] Create feature branch
 
 ## Phase 1 (P0): Core Structure + Config
-- [ ] Update dependencies (package.json)
-- [ ] Zod-validated env config
-- [ ] Restructure directories
-- [ ] Typed provider interface + pricing
+- [x] Update dependencies (package.json)
+- [x] Zod-validated env config
+- [x] Restructure directories
+- [x] Typed provider interface + pricing
 
 ## Phase 2 (P1): Observability Layer
-- [ ] Pino structured logger
-- [ ] OpenTelemetry bootstrap + tracing + metrics
-- [ ] Request logger middleware
-- [ ] Instrument LLM providers
-- [ ] Docker observability stack (Jaeger + Prometheus + Grafana)
-- [ ] Pre-built Grafana dashboard
+- [x] Pino structured logger
+- [x] OpenTelemetry bootstrap + tracing + metrics
+- [x] Request logger middleware
+- [x] Instrument LLM providers
+- [x] Docker observability stack (Jaeger + Prometheus + Grafana)
+- [x] Pre-built Grafana dashboard
 
 ## Phase 3 (P2): Guardrails
-- [ ] Input validation (Zod)
-- [ ] Prompt injection detection
-- [ ] Input sanitization
-- [ ] Output parser with retry
-- [ ] Content filter hooks
-- [ ] Token budget rate limiter
-- [ ] Circuit breaker
-- [ ] Integrate pipeline into agent controller
+- [x] Input validation (Zod)
+- [x] Prompt injection detection
+- [x] Input sanitization
+- [x] Output parser with retry
+- [x] Content filter hooks
+- [x] Token budget rate limiter
+- [x] Circuit breaker
+- [x] Integrate pipeline into agent controller
 
 ## Phase 4 (P3): Developer Experience
-- [ ] Multi-stage Dockerfile
-- [ ] docker-compose.yml (full stack)
-- [ ] Unit tests (vitest)
-- [ ] Integration test
-- [ ] GitHub Actions CI
-- [ ] .env.example
+- [x] Multi-stage Dockerfile
+- [x] docker-compose.yml (full stack)
+- [x] Unit tests (vitest) — 43 tests
+- [x] Integration test
+- [x] GitHub Actions CI
+- [x] .env.example
 
 ## Phase 5: README
-- [ ] Production-grade README with architecture diagram
+- [x] Production-grade README with architecture diagram
 
 ## Phase 6: Upwork Profile
-- [ ] upwork-profile.md
+- [x] upwork-profile.md
